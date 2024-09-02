@@ -1,0 +1,67 @@
+### Database Design Enhancements
+
+To accommodate the need to store services with codes and reasonable service charges, and to maintain a proper service list for claims processing, EOB generation, and fraud detection, here’s how the database can be designed:
+
+### **Entities and Attributes:**
+
+1. **Services**
+   - **service_id** (Primary Key)
+   - **service_code** (e.g., CPT, HCPCS codes)
+   - **description** (Description of the service)
+   - **standard_charge** (The reasonable or standard charge for the service)
+
+2. **Fee Schedules**
+   - **fee_schedule_id** (Primary Key)
+   - **schedule_name** (Name of the fee schedule)
+   - **effective_date** (When the fee schedule becomes effective)
+   - **service_id** (Foreign Key to Services)
+   - **fee_amount** (The fee applied for the service under this schedule)
+
+3. **Providers**
+   - **provider_id** (Primary Key)
+   - **name** (Name of the provider)
+   - **contract_id** (Foreign Key to Contracts)
+   - **services_offered** (List of services the provider is contracted to offer)
+
+4. **Contracts**
+   - **contract_id** (Primary Key)
+   - **provider_id** (Foreign Key to Providers)
+   - **payer_id** (Foreign Key to Payers)
+   - **fee_schedule_id** (Foreign Key to Fee Schedules)
+   - **start_date** (Contract start date)
+   - **end_date** (Contract end date)
+
+5. **Claims**
+   - **claim_id** (Primary Key)
+   - **provider_id** (Foreign Key to Providers)
+   - **service_list** (List of service IDs associated with the claim)
+   - **total_charge** (Total charge based on services provided)
+   - **member_cost_sharing** (Including copay, coinsurance, deductible)
+   - **payer_responsibility**
+   - **total_payment**
+   - **final_decision**
+   - **eob_details** (Link to EOB details)
+   - **fraud_flag** (Indicator if the claim is flagged for fraud)
+
+6. **EOB (Explanation of Benefits)**
+   - **eob_id** (Primary Key)
+   - **claim_id** (Foreign Key to Claims)
+   - **service_details** (List of services included in the claim)
+   - **total_payment**
+   - **member_responsibility**
+   - **denial_reasons** (If applicable)
+   - **comments**
+
+### **Relationships and Workflow:**
+- **Services**: Stores the master list of all healthcare services with their codes and standard charges.
+- **Fee Schedules**: Links services to specific fee schedules, storing the negotiated fee for each service.
+- **Providers**: Lists the providers and their contracts with payers, specifying the fee schedule they adhere to.
+- **Contracts**: Captures the agreement details between providers and payers, linking to the relevant fee schedule.
+- **Claims**: Includes the list of services provided in each claim, and links to fee schedules for charge calculation. Also integrates fraud detection flags.
+- **EOB**: Generated based on the claim, detailing the services, payment, and any patient responsibility.
+
+### **Usage in Fraud Detection and EOB:**
+- **Fraud Detection**: By comparing the services claimed with standard charges and detecting anomalies (e.g., services billed at higher-than-expected rates or services not typically provided by a provider), the system can flag potential fraud.
+- **EOB Generation**: The system can automatically generate an accurate EOB by referencing the service list in the claim and applying the correct fees and patient responsibilities.
+
+This design ensures that all critical elements for claims processing, fraud detection, and EOB generation are captured and efficiently managed.
