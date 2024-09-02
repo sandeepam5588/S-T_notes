@@ -1,0 +1,270 @@
+1. Fraud Detection
+	Use case description : Analyzing claims for potential fraud algorithms and rules based systems
+	Actors : 
+	 	- Fraud Detection system: Analyze claims for fraud
+	 	- Payer: Investigates flagged claims
+
+	Preconditios
+		- claims are undergoing adjudication
+
+	step by step workflow
+		- page: Fraud Aleart Dashboard
+
+		 		Field Name		Description
+		 		Claim ID		unique identifier for the claim
+		 		Member ID 		unique identifier for the provider
+		 		Alert Level		level of fraud alert(High, Medium, Low)
+		 		Alert reason	Reason for the alert
+		 		Action Taken	Actions taken based on the alert
+
+		 process
+		 	- Fraud detection algrotihms analye the claim
+		 	- Flags suspicious claims for further investigation
+
+
+2. Pricing and Payment Calculation
+	Use case description : Applying fee schedules and contracts to determine payment amounts and calculating member and payer responsibilities
+
+	Actors
+		- Claims Prpcessing System: Calculates payment
+		- Payer: Oversees payment calculation
+
+	Preconditions
+		- claims have passed fraud detection checks
+
+	step by step workflow
+		- page : Payment calculatin view
+
+			Filed Name		Description
+			Claim ID 		Unique identifier for the claim
+			service codes	codes representing services(CAT/HCPCS)
+			Fee schedule    Fee schedule applied
+			Provider contract 	contract details with provider
+			Member cost sharing	Member responsibility(co-pay, Deductible, co-insurance)
+			Payer Responsibility 	Amount the payer is responsible for
+			Total Payment 	Total payment amount
+
+		- process
+			-System applies fee schedules and contracts to determine payment amounts
+			-calculates member's cost sharing and payer's responsibility
+
+
+3. Claims Approval/Denial
+	use case description : Final adjudication decision and generating Explanation of Benefits(EOB) for provider and member
+
+	Actors
+		- claims processing system: Finalizes the claim decision
+		- Payer : Reviews and approves the final decision
+
+	Pre conditions
+		- Payment calculations are complete
+
+	step by step workflow
+		- page: Claims decision page
+
+		FieldName		Description
+		Claim ID 		Unique identifier for the claim
+		Final Decision 	Final decision(Approved, Denied)
+		EOB Details		Explanation of Benefits details
+		Denial Reasons	Reasons for detail if applicable
+
+	process
+		- Final adjudication dicision is made
+		- EOB is generated and sent to the provider and member
+
+
+4.Payment processing
+	use case description: Processing payments for approved claims and disbursing funds to providers
+
+	Actors
+		- Payment system: Processes payments
+		- Payer : Oversees the payment process
+
+	Pre conditions
+		- Claims have been approved for payment
+
+	step by step workflow
+		-page: payment disbursement view
+
+		FieldName		Deszription
+		Claim ID  		unique identifier for the claim
+		Payment method	method of payment(EFT, Checks)
+		Payment date	date of payment
+		payemnt amount 	Amount to be paid
+		Provier account details		Provider's account details for payment
+
+	process
+	- Approved claims proceed to payment processing
+	- Payments are disbursed to providers via the chosen method
+
+
+===================================================================
+
+
+My manager has given me some use cases on Health insurance claim processing. 
+we have to design database(Relational), rest webservices, microservices using Java and spring boot.
+
+use case talks about Health insurance claims. 
+
+there are two actors in the system
+	1. Payers are organizations that process and pay claims for healthcare services, and determine coverage amounts. 
+	   Payers can be private  surance companies, Medicare, or Medicaid.
+	   We have to designe the solution by Payer centric or payer point of view. We no need to maintain any Payer details in the database, beacuse we are the Payer.
+
+	2. Providers are individuals or organizations that offer healthcare services to patients, such as hospitals or clinics.
+	   we have to maintain the providers details in our database. Only registered providers can user our system for claims processing.
+
+as per the given usecases i think we have to develop three microservices
+	1. Fraud Detection System
+	2. Claims Processing System
+	3. Payment System
+
+here is the functionalities of each microservice
+	1. Fraud Detection System : Analyzing claims for potential fraud algorithms and rules based systems
+	   - Fraud detection algrotihms to analyse the claim
+	   - Flags suspicious claims for further investigation
+
+	   Preconditios
+		- claims are undergoing adjudication
+
+	   API's
+	   - analyze cliam for fraud : to analyze whether the given claim is fraud or not and Flag suspicious claims for further investigation
+	   - Fraud Alert Dashboard : to display all the claims that are detected as fraud
+
+	   page: Fraud Aleart Dashboard
+
+		 	Field Name		Description
+		 	Claim ID		unique identifier for the claim
+		 	Member ID 		unique identifier for the provider
+		 	Alert Level		level of fraud alert(High, Medium, Low)
+		 	Alert reason	Reason for the alert
+		 	Action Taken	Actions taken based on the alert
+
+	2. Claims Prpcessing System : Applying fee schedules and contracts to determine payment amounts and calculating member and payer responsibilities.
+		- Calculates payment
+		- allows Payer to Oversee payment calculation
+		- Finalizes the claim decision
+		- Explanation of Benefits(EOB) is generated and sent to the provider and member
+
+		Preconditions
+		- claims have passed fraud detection checks
+
+		API's
+		- calculate the payment: system applies fee schedules and contracts to determine payment amounts. calculates member's cost sharing and payer's responsibility
+		- display payment details : the payer can see the payment details of a claim
+		- finalize the claim : the payer can finalize the claim decision
+		- EOB : to generate EOB and send to the provider
+
+		- page : Payment calculation view
+
+			Filed Name				 Description
+			Claim ID 				: Unique identifier for the claim
+			service codes			: codes representing services(CAT/HCPCS)
+			Fee schedule    		: Fee schedule applied
+			Provider contract 		: contract details with provider
+			Member cost sharing		: Member responsibility(co-pay, Deductible, co-insurance)
+			Payer Responsibility 	: Amount the payer is responsible for
+			Total Payment 			: Total payment amount
+
+		Pre conditions
+		- Payment calculations are complete
+
+		- page: Claims decision page
+
+		FieldName		Description
+		Claim ID 		Unique identifier for the claim
+		Final Decision 	Final decision(Approved, Denied)
+		EOB Details		Explanation of Benefits details
+		Denial Reasons	Reasons for detail if applicable
+
+
+	3.Payment system : Processing payments for approved claims and disbursing funds to providers
+		- Processes payments
+		- allowes Payer to Oversee the payment process
+
+	Pre conditions
+		- Claims have been approved for payment
+
+	API's
+	- Approved claims proceed to payment processing
+	- Payments are disbursed to providers via the chosen method
+
+	-page: payment disbursement view
+
+		FieldName		Description
+		Claim ID  		unique identifier for the claim
+		Payment method	method of payment(EFT, Checks)
+		Payment date	date of payment
+		payemnt amount 	Amount to be paid
+		Provier account details		Provider's account details for payment
+
+Note : We have to design and develop the system as Payer point of view.
+
+
+
+================================================================================
+Entity  Relationship
+
+claim
+	claim_id
+	provider_id
+	member_id
+	service_code
+	is_fraud
+	claim_status
+	member_cost_share
+	payer_cost_share
+	eob_details
+	denial_reasons
+	total_amount
+
+Provider
+	provider_id
+	provider_name
+	provider_address
+	provider_contact
+	provider_bank_details
+
+Member
+	member_id
+	policy_id
+	member_name
+	member_ssn
+	policy_start_date
+	policy_end_date
+	member_cost_share
+
+policy
+	policy_id
+	policy_name
+
+fraud_alert
+	alert_id
+	claim_id
+	provider_id
+	alert_level
+	alert_reason
+	alert_action_taken
+	alert_reported_date
+	last_update
+
+payment
+	payment_id
+	claim_id
+	payment_amount
+	payment_status
+	payment_method
+	payment_date
+	provider_acc_number
+
+service_codes
+	service_code
+	service
+	description
+
+contract
+	contract_id
+	provider_id
+	contract_terms
+	start_date
+	end_date
